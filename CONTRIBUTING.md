@@ -23,7 +23,7 @@ First off, thank you for considering contributing to View Counter Backend! It's 
 
 ## Development Setup
 
-1. **Clone the repo**: `git clone https://github.com/your-username/viewcounterbackend.git`
+1. **Clone the repo**: `git clone https://github.com/harshankur/viewcounterbackend.git`
 2. **Install deps**: `npm install`
 3. **Setup environment**: Rename `.env.example` to `.env` or follow the `npm run setup` wizard.
 4. **Run tests**: `npm test`

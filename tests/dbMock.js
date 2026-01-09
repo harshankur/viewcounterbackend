@@ -18,12 +18,21 @@ class MockPool {
             return [[{ 1: 1 }]];
         }
 
-        // Stats: Total views
+        // Stats: Unified Total/Unique/Visitors query
+        if (sqlLower.includes('count(*) as total_views')) {
+            return [[{
+                total_views: 150,
+                unique_views: 100,
+                unique_visitors: 45
+            }]];
+        }
+
+        // Stats: Total views (old/other queries)
         if (sqlLower.includes('count(*) as total')) {
             return [[{ total: 150 }]];
         }
 
-        // Stats: Unique visitors
+        // Stats: Unique visitors (old/other queries)
         if (sqlLower.includes('count(distinct ip)')) {
             return [[{ unique_visitors: 45 }]];
         }

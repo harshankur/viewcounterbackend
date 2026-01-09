@@ -12,7 +12,7 @@ info:
   version: 2.1.0
   contact:
     name: Harsh Ankur
-    url: https://github.com/your-username/viewcounterbackend
+    url: https://github.com/harshankur/viewcounterbackend
 servers:
   - url: http://localhost:3030
     description: Local development server
@@ -120,6 +120,21 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  totalViews:
+                    type: integer
+                  uniqueViews:
+                    type: integer
+                  uniqueVisitors:
+                    type: integer
+                  last24Hours:
+                    type: integer
+                  byCountry:
+                    type: array
+                  byDevice:
+                    type: array
+        '400':
+          description: Invalid appId
 
   /trends/{appId}:
     get:

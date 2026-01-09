@@ -79,12 +79,13 @@ describe('DatabaseManager', () => {
         test('should return statistics', async () => {
             const stats = await dbManager.getStats('test_app_1');
 
-            expect(stats).toHaveProperty('total');
+            expect(stats).toHaveProperty('totalViews');
+            expect(stats).toHaveProperty('uniqueViews');
             expect(stats).toHaveProperty('uniqueVisitors');
             expect(stats).toHaveProperty('last24Hours');
             expect(stats).toHaveProperty('byCountry');
             expect(stats).toHaveProperty('byDevice');
-            expect(typeof stats.total).toBe('number');
+            expect(typeof stats.totalViews).toBe('number');
         });
     });
 

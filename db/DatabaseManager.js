@@ -160,6 +160,7 @@ class DatabaseManager {
         } = data;
 
         // Check for duplicate within time window if enabled (only for pageviews)
+        let isUnique = 1;
         if (uniqueWindowHours > 0 && eventType === 'pageview') {
             const [existing] = await this.pool.query(
                 `SELECT id FROM \`${appId}\` 
@@ -169,19 +170,19 @@ class DatabaseManager {
             );
 
             if (existing.length > 0) {
-                return { duplicate: true, message: 'View already registered within time window' };
+                isUnique = 0;
             }
         }
 
-        // Insert new event
+        // Insert new event (always insert now to support Total Views)
         const [result] = await this.pool.query(
             `INSERT INTO \`${appId}\` (
                 ip, country, timestamp, devicesize,
                 page_path, page_title,
                 referrer, referrer_domain, source_type,
                 browser, browser_version, os, os_version, device_type,
-                session_id, event_type, event_data
-            ) VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                session_id, event_type, event_data, is_unique
+            ) VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 ip,
                 country || null,
@@ -198,11 +199,16 @@ class DatabaseManager {
                 deviceType || null,
                 sessionId || null,
                 eventType,
-                eventData ? JSON.stringify(eventData) : null
+                eventData ? JSON.stringify(eventData) : null,
+                isUnique
             ]
         );
 
-        return { duplicate: false, insertId: result.insertId };
+        return {
+            duplicate: isUnique === 0,
+            insertId: result.insertId,
+            isUnique: isUnique === 1
+        };
     }
 
     /**
@@ -225,13 +231,15 @@ class DatabaseManager {
             throw new Error('Database not initialized');
         }
 
-        const [totalViews] = await this.pool.query(
-            `SELECT COUNT(*) as total FROM \`${appId}\``
+        const [totalStats] = await this.pool.query(
+            `SELECT 
+                COUNT(*) as total_views,
+                SUM(CASE WHEN is_unique = 1 THEN 1 ELSE 0 END) as unique_views,
+                COUNT(DISTINCT ip) as unique_visitors
+             FROM \`${appId}\``
         );
 
-        const [uniqueIPs] = await this.pool.query(
-            `SELECT COUNT(DISTINCT ip) as unique_visitors FROM \`${appId}\``
-        );
+        const stats = totalStats[0];
 
         const [byCountry] = await this.pool.query(
             `SELECT country, COUNT(*) as count FROM \`${appId}\` 
@@ -253,8 +261,9 @@ class DatabaseManager {
         );
 
         return {
-            total: totalViews[0].total,
-            uniqueVisitors: uniqueIPs[0].unique_visitors,
+            totalViews: stats.total_views,
+            uniqueViews: stats.unique_views,
+            uniqueVisitors: stats.unique_visitors,
             last24Hours: recent[0].count,
             byCountry: byCountry,
             byDevice: byDevice

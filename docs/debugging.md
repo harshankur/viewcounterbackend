@@ -42,4 +42,4 @@ The server uses structured logging. You can see detailed request information in 
 `[Timestamp] [INFO/WARN/ERROR] Message | IP: 123.123.123.123`
 
 ## Reporting Issues
-If you find a bug that isn't covered here, please [open an issue](https://github.com/your-username/viewcounterbackend/issues).
+If you find a bug that isn't covered here, please [open an issue](https://github.com/harshankur/viewcounterbackend/issues).

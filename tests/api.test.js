@@ -194,7 +194,8 @@ describe('API Endpoints - Integration Tests', () => {
                 .expect(200);
 
             expect(response.body.appId).toBe('test_app_1');
-            expect(response.body.stats).toHaveProperty('total');
+            expect(response.body.stats).toHaveProperty('totalViews');
+            expect(response.body.stats).toHaveProperty('uniqueViews');
             expect(response.body.stats).toHaveProperty('uniqueVisitors');
             expect(response.body.stats).toHaveProperty('last24Hours');
             expect(response.body.stats).toHaveProperty('byCountry');

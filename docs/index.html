@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Counter Backend | Documentation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --primary: #6366f1;
@@ -33,7 +36,9 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             font-family: 'Outfit', sans-serif;
             font-weight: 700;
         }
@@ -61,8 +66,13 @@
         }
 
         @keyframes move {
-            from { transform: translate(-10%, -10%); }
-            to { transform: translate(100%, 80%); }
+            from {
+                transform: translate(-10%, -10%);
+            }
+
+            to {
+                transform: translate(100%, 80%);
+            }
         }
 
         nav {
@@ -216,11 +226,17 @@
         }
 
         @media (max-width: 768px) {
-            header h1 { font-size: 2.5rem; }
-            .nav-links { display: none; }
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="background-blobs">
         <div class="blob"></div>
@@ -232,16 +248,18 @@
             <a href="#features">Features</a>
             <a href="#quick-start">Quick Start</a>
             <a href="#api-reference">API Reference</a>
-            <a href="https://github.com/your-username/viewcounterbackend">GitHub</a>
+            <a href="https://github.com/harshankur/viewcounterbackend">GitHub</a>
         </div>
     </nav>
 
     <header>
         <h1>Privacy-First <span style="color: var(--primary)">Analytics</span></h1>
-        <p>A lightweight, high-performance middleware for tracking views and events without compromising user privacy. Self-hosted, secure, and ready for production.</p>
+        <p>A lightweight, high-performance middleware for tracking views and events without compromising user privacy.
+            Self-hosted, secure, and ready for production.</p>
         <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
             <a href="#api-reference" class="btn btn-primary">API Reference</a>
-            <a href="https://github.com/your-username/viewcounterbackend" class="btn" style="border: 1px solid var(--border);">Fork on GitHub</a>
+            <a href="https://github.com/harshankur/viewcounterbackend" class="btn"
+                style="border: 1px solid var(--border);">Fork on GitHub</a>
         </div>
     </header>
 
@@ -258,11 +276,13 @@
                 </div>
                 <div class="card">
                     <h3>🛡️ Production Ready</h3>
-                    <p>Full security hardening with Helmet, Rate-limiting, and SQL injection prevention via prepared statements.</p>
+                    <p>Full security hardening with Helmet, Rate-limiting, and SQL injection prevention via prepared
+                        statements.</p>
                 </div>
                 <div class="card">
                     <h3>📊 Rich Insights</h3>
-                    <p>Track page paths, titles, traffic sources, and browsers without invasive cookies.</p>
+                    <p>Track page paths, titles, traffic sources, and browsers. Now supporting both <b>Total Views</b>
+                        and <b>Unique Visitors</b>.</p>
                 </div>
             </div>
         </section>
@@ -275,7 +295,7 @@
             <div style="max-width: 800px; margin: 0 auto;">
                 <h3>1. Installation</h3>
                 <div class="code-block">
-                    git clone https://github.com/your-username/viewcounterbackend.git<br>
+                    git clone https://github.com/harshankur/viewcounterbackend.git<br>
                     npm install
                 </div>
                 <h3>2. Setup</h3>
@@ -295,7 +315,7 @@
                 <p>Explore the endpoints and response formats.</p>
             </div>
             <!-- Redoc will sit here -->
-            <div id="redoc-container"></div>
+            <div id="api-docs"></div>
         </section>
 
         <section id="debugging" style="margin-top: 8rem;">
@@ -304,10 +324,12 @@
             </div>
             <div class="card">
                 <h3>Check Server Readiness</h3>
-                <p>Use the <code>/health</code> endpoint to verify server and database connectivity. If returns 503, check your database credentials in <code>dbInfo.json</code>.</p>
+                <p>Use the <code>/health</code> endpoint to verify server and database connectivity. If returns 503,
+                    check your database credentials in <code>dbInfo.json</code>.</p>
                 <br>
                 <h3>Testing with Mocks</h3>
-                <p>Run <code>npm test</code> to execute 60+ tests using our custom mocking system. No real database required!</p>
+                <p>Run <code>npm test</code> to execute 60+ tests using our custom mocking system. No real database
+                    required!</p>
                 <br>
                 <h3>View Persistent Data</h3>
                 <p>Run <code>PERSIST_TEST_DB=true npm test</code> to keep the test database for inspection.</p>
@@ -336,8 +358,9 @@
                     }
                 }
             },
-            document.getElementById('redoc-container')
+            document.getElementById('api-docs')
         );
     </script>
 </body>
+
 </html>

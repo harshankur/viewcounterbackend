@@ -1,13 +1,13 @@
 # View Counter Backend
 
-[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blueviolet)](https://your-username.github.io/viewcounterbackend/)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blueviolet)](https://harshankur.github.io/viewcounterbackend/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-61%20passing-success)](TEST_REPORT.md)
 
 A comprehensive Node.js/Express analytics server for tracking website views with MySQL storage, featuring auto-database creation, advanced tracking, and rich analytics.
 
 ## 📖 Documentation
-Visit our [Interactive Documentation](https://your-username.github.io/viewcounterbackend/) for detailed API specifications, debugging tips, and integration guides.
+Visit our [Interactive Documentation](https://harshankur.github.io/viewcounterbackend/) for detailed API specifications, debugging tips, and integration guides.
 
 ## ✨ Features
 

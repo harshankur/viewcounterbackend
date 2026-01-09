@@ -49,6 +49,9 @@ CREATE TABLE IF NOT EXISTS `{{APP_ID}}` (
     `event_type` VARCHAR(50) DEFAULT 'pageview',
     `event_data` JSON DEFAULT NULL,
     
+    -- Uniqueness tracking
+    `is_unique` TINYINT(1) DEFAULT 1,
+    
     -- Indexes
     INDEX `idx_timestamp` (`timestamp`),
     INDEX `idx_ip_timestamp` (`ip`, `timestamp`),
@@ -61,5 +64,6 @@ CREATE TABLE IF NOT EXISTS `{{APP_ID}}` (
     INDEX `idx_os` (`os`),
     INDEX `idx_device_type` (`device_type`),
     INDEX `idx_session_id` (`session_id`),
-    INDEX `idx_event_type` (`event_type`)
+    INDEX `idx_event_type` (`event_type`),
+    INDEX `idx_is_unique` (`is_unique`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

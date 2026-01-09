@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/viewcounterbackend.git"
+    "url": "git+https://github.com/harshankur/viewcounterbackend.git"
   },
   "keywords": [
     "viewcounter",
@@ -31,9 +31,9 @@
   "author": "Harsh Ankur",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/your-username/viewcounterbackend/issues"
+    "url": "https://github.com/harshankur/viewcounterbackend/issues"
   },
-  "homepage": "https://your-username.github.io/viewcounterbackend/",
+  "homepage": "https://harshankur.github.io/viewcounterbackend/",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
