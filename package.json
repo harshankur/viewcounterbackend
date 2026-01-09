@@ -16,8 +16,24 @@
     "jest-html-reporter": "^3.10.2",
     "supertest": "^7.2.2"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/viewcounterbackend.git"
+  },
+  "keywords": [
+    "viewcounter",
+    "analytics",
+    "tracking",
+    "mysql",
+    "middleware",
+    "privacy-first"
+  ],
   "author": "Harsh Ankur",
-  "license": "ISC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/your-username/viewcounterbackend/issues"
+  },
+  "homepage": "https://your-username.github.io/viewcounterbackend/",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

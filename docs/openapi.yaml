@@ -1,0 +1,194 @@
+openapi: 3.0.0
+info:
+  title: View Counter Backend API
+  description: |
+    A privacy-first, lightweight analytics backend for tracking views and events across multiple applications.
+    
+    ### Key Features:
+    - **Self-managed**: Auto-creates database and tables if needed.
+    - **Privacy-First**: No cookies, lightweight tracking.
+    - **Secure**: Helmet, rate-limiting, and SQL injection protection.
+    - **Rich Analytics**: Page tracking, referrer analysis, user agent parsing.
+  version: 2.1.0
+  contact:
+    name: Harsh Ankur
+    url: https://github.com/your-username/viewcounterbackend
+servers:
+  - url: http://localhost:3030
+    description: Local development server
+paths:
+  /registerView:
+    get:
+      summary: Register a page view
+      description: Track a visitor landing on a page. Automatically parses User-Agent and Referrer headers.
+      parameters:
+        - name: appId
+          in: query
+          required: true
+          schema:
+            type: string
+          description: The registered application ID.
+        - name: deviceSize
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [small, medium, large]
+          description: Screen size category of the user device.
+        - name: page
+          in: query
+          schema:
+            type: string
+          description: Path of the page (e.g., /blog/post-1).
+        - name: title
+          in: query
+          schema:
+            type: string
+          description: Title of the page.
+        - name: referrer
+          in: query
+          schema:
+            type: string
+          description: Overrides the Referer header if provided.
+        - name: sessionId
+          in: query
+          schema:
+            type: string
+          description: Unique identifier for the user session.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Success!
+                  duplicate:
+                    type: boolean
+                    example: false
+        '400':
+          description: Invalid Parameters
+        '422':
+          description: Validation Failed
+        '429':
+          description: Too Many Requests
+
+  /event:
+    post:
+      summary: Track a custom event
+      description: Track arbitrary user interactions (clicks, form submits, etc.)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [appId, eventType]
+              properties:
+                appId:
+                  type: string
+                eventType:
+                  type: string
+                  example: button_click
+                eventData:
+                  type: object
+                  description: Custom JSON metadata for the event.
+                sessionId:
+                  type: string
+      responses:
+        '200':
+          description: Event tracked
+        '400':
+          description: Invalid appId
+
+  /stats/{appId}:
+    get:
+      summary: Get aggregated statistics
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /trends/{appId}:
+    get:
+      summary: Get time-based trends
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: period
+          in: query
+          schema:
+            type: string
+            enum: [hourly, daily, weekly]
+            default: daily
+        - name: days
+          in: query
+          schema:
+            type: integer
+            default: 30
+      responses:
+        '200':
+          description: Success
+
+  /referrers/{appId}:
+    get:
+      summary: Get top traffic sources
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+
+  /browsers/{appId}:
+    get:
+      summary: Get browser/OS breakdown
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+
+  /pages/{appId}:
+    get:
+      summary: Get most viewed pages
+      parameters:
+        - name: appId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+
+  /health:
+    get:
+      summary: Server health check
+      responses:
+        '200':
+          description: Healthy
+        '503':
+          description: Unhealthy (DB disconnected)
