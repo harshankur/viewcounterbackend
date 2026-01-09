@@ -5,7 +5,6 @@ allowed.json
 # Test coverage and reports
 coverage/
 test-report.html
-TEST_REPORT.md
 *.log
 
 # Logs
