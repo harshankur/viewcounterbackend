@@ -1,0 +1,11 @@
+{
+    "appId": [
+        "example_app_1",
+        "example_app_2"
+    ],
+    "deviceSize": [
+        "small",
+        "medium",
+        "large"
+    ]
+}

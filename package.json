@@ -1,18 +1,33 @@
 {
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "geoip-country": "^5.0.202501212341",
-    "mysql": "^2.18.1"
-  },
   "name": "viewcounterbackend",
   "description": "A middleware backend server that registers views to my db server when requested to register a view from my other projects.",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "setup": "node scripts/setup.js",
+    "test": "jest --coverage --verbose && node scripts/generateTestReport.js",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --coverage --ci",
+    "test:persist": "PERSIST_TEST_DB=true jest --coverage --verbose && node scripts/generateTestReport.js"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-html-reporter": "^3.10.2",
+    "supertest": "^7.2.2"
   },
   "author": "Harsh Ankur",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "express-validator": "^7.3.1",
+    "geoip-country": "^5.0.202501212341",
+    "helmet": "^8.1.0",
+    "mysql2": "^3.16.0",
+    "ua-parser-js": "^2.0.1",
+    "url-parse": "^1.5.10"
+  }
 }
