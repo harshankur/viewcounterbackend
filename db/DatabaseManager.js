@@ -1,6 +1,7 @@
 const mysql = require('mysql2/promise');
 const fs = require('fs');
 const path = require('path');
+const PrivacyUtils = require('../utils/privacyUtils');
 
 /**
  * Database Manager
@@ -86,7 +87,8 @@ class DatabaseManager {
                 await connection.query(`
                     CREATE TABLE IF NOT EXISTS \`${appId}\` (
                         \`id\` BIGINT AUTO_INCREMENT PRIMARY KEY,
-                        \`ip\` VARCHAR(45) NOT NULL,
+                        \`masked_ip\` VARCHAR(45) NOT NULL,
+                        \`visitor_hash\` VARCHAR(64) NOT NULL,
                         \`country\` VARCHAR(2) DEFAULT NULL,
                         \`timestamp\` DATETIME NOT NULL,
                         \`devicesize\` VARCHAR(20) NOT NULL,
@@ -94,7 +96,6 @@ class DatabaseManager {
                         \`page_title\` VARCHAR(200) DEFAULT NULL,
                         \`referrer\` VARCHAR(500) DEFAULT NULL,
                         \`referrer_domain\` VARCHAR(200) DEFAULT NULL,
-                        \`source_type\` VARCHAR(20) DEFAULT NULL,
                         \`browser\` VARCHAR(50) DEFAULT NULL,
                         \`browser_version\` VARCHAR(20) DEFAULT NULL,
                         \`os\` VARCHAR(50) DEFAULT NULL,
@@ -103,18 +104,20 @@ class DatabaseManager {
                         \`session_id\` VARCHAR(64) DEFAULT NULL,
                         \`event_type\` VARCHAR(50) DEFAULT 'pageview',
                         \`event_data\` JSON DEFAULT NULL,
+                        \`is_unique\` TINYINT(1) DEFAULT 1,
                         INDEX \`idx_timestamp\` (\`timestamp\`),
-                        INDEX \`idx_ip_timestamp\` (\`ip\`, \`timestamp\`),
+                        INDEX \`idx_visitor_timestamp\` (\`visitor_hash\`, \`timestamp\`),
+                        INDEX \`idx_masked_ip\` (\`masked_ip\`),
                         INDEX \`idx_country\` (\`country\`),
                         INDEX \`idx_devicesize\` (\`devicesize\`),
                         INDEX \`idx_page_path\` (\`page_path\`(255)),
                         INDEX \`idx_referrer_domain\` (\`referrer_domain\`),
-                        INDEX \`idx_source_type\` (\`source_type\`),
                         INDEX \`idx_browser\` (\`browser\`),
                         INDEX \`idx_os\` (\`os\`),
                         INDEX \`idx_device_type\` (\`device_type\`),
                         INDEX \`idx_session_id\` (\`session_id\`),
-                        INDEX \`idx_event_type\` (\`event_type\`)
+                        INDEX \`idx_event_type\` (\`event_type\`),
+                        INDEX \`idx_is_unique\` (\`is_unique\`)
                     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
                 `);
                 console.log(`✓ Table '${appId}' ready`);
@@ -156,17 +159,22 @@ class DatabaseManager {
             sessionId,
             eventType = 'pageview',
             eventData,
-            uniqueWindowHours = 24
+            uniqueWindowHours = 24,
+            userAgent = ''
         } = data;
+
+        // Privacy: Mask IP and generate transient hash
+        const hashedVisitor = PrivacyUtils.generateVisitorHash(ip, userAgent);
+        const maskedIp = PrivacyUtils.maskIP(ip);
 
         // Check for duplicate within time window if enabled (only for pageviews)
         let isUnique = 1;
         if (uniqueWindowHours > 0 && eventType === 'pageview') {
             const [existing] = await this.pool.query(
                 `SELECT id FROM \`${appId}\` 
-                 WHERE ip = ? AND event_type = 'pageview' AND timestamp > DATE_SUB(NOW(), INTERVAL ? HOUR) 
+                 WHERE visitor_hash = ? AND event_type = 'pageview' AND timestamp > DATE_SUB(NOW(), INTERVAL ? HOUR) 
                  LIMIT 1`,
-                [ip, uniqueWindowHours]
+                [hashedVisitor, uniqueWindowHours]
             );
 
             if (existing.length > 0) {
@@ -177,21 +185,21 @@ class DatabaseManager {
         // Insert new event (always insert now to support Total Views)
         const [result] = await this.pool.query(
             `INSERT INTO \`${appId}\` (
-                ip, country, timestamp, devicesize,
+                masked_ip, visitor_hash, country, timestamp, devicesize,
                 page_path, page_title,
-                referrer, referrer_domain, source_type,
+                referrer, referrer_domain,
                 browser, browser_version, os, os_version, device_type,
                 session_id, event_type, event_data, is_unique
-            ) VALUES (?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            ) VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
-                ip,
+                maskedIp,
+                hashedVisitor,
                 country || null,
                 deviceSize,
                 pagePath || null,
                 pageTitle || null,
                 referrer || null,
                 referrerDomain || null,
-                sourceType || null,
                 browser || null,
                 browserVersion || null,
                 os || null,
@@ -235,7 +243,7 @@ class DatabaseManager {
             `SELECT 
                 COUNT(*) as total_views,
                 SUM(CASE WHEN is_unique = 1 THEN 1 ELSE 0 END) as unique_views,
-                COUNT(DISTINCT ip) as unique_visitors
+                COUNT(DISTINCT visitor_hash) as unique_visitors
              FROM \`${appId}\``
         );
 
@@ -279,7 +287,7 @@ class DatabaseManager {
         }
 
         const [views] = await this.pool.query(
-            `SELECT ip, country, timestamp, devicesize 
+            `SELECT masked_ip, country, timestamp, devicesize 
              FROM \`${appId}\` 
              ORDER BY timestamp DESC 
              LIMIT ? OFFSET ?`,

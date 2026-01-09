@@ -5,6 +5,7 @@
 class MockPool {
     constructor(config) {
         this.config = config;
+        this.duplicates = {};
     }
 
     async query(sql, params = []) {
@@ -33,7 +34,7 @@ class MockPool {
         }
 
         // Stats: Unique visitors (old/other queries)
-        if (sqlLower.includes('count(distinct ip)')) {
+        if (sqlLower.includes('count(distinct visitor_hash)') || sqlLower.includes('count(distinct ip)')) {
             return [[{ unique_visitors: 45 }]];
         }
 
@@ -111,25 +112,22 @@ class MockPool {
         // Session/Recent Views
         if (sqlLower.includes('from `') && (sqlLower.includes('order by timestamp') || sqlLower.includes('where session_id'))) {
             return [[
-                { ip: '192.168.1.1', country: 'US', timestamp: new Date(), devicesize: 'large', page_path: '/test', event_type: 'pageview' },
-                { ip: '192.168.1.1', country: 'US', timestamp: new Date(), devicesize: 'large', page_path: '/test', event_type: 'click', event_data: { button: 'test' } }
+                { masked_ip: '192.168.1.0', country: 'US', timestamp: new Date(), devicesize: 'large', page_path: '/test', event_type: 'pageview' },
+                { masked_ip: '192.168.1.0', country: 'US', timestamp: new Date(), devicesize: 'large', page_path: '/test', event_type: 'click', event_data: { button: 'test' } }
             ]];
         }
 
         // Duplicate check
         if (sqlLower.includes('select id from') && sqlLower.includes('limit 1')) {
-            // Logic: if IP is '127.0.0.1', return empty (not duplicate)
-            // If it's the second call for the same IP in duplicate test, return match
-            if (params[0] === '127.0.0.1') return [[]];
-            if (params[0] === '192.168.1.200') {
-                // Return duplicate for the second call in the test
-                const ip = params[0];
-                this.duplicates = this.duplicates || {};
-                if (this.duplicates[ip]) return [[{ id: 1 }]];
-                this.duplicates[ip] = true;
-                return [[]];
-            }
-            return [[]];
+            // Logic: if visitor_hash is specifically handled, simulate results
+            const hash = params[0];
+
+            // For unit tests, we use a specific hash usually
+            if (this.duplicates && this.duplicates[hash]) return [[{ id: 1 }]];
+
+            this.duplicates = this.duplicates || {};
+            this.duplicates[hash] = true;
+            return [[]]; // First time is always unique
         }
 
         // Count queries

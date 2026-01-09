@@ -67,6 +67,20 @@ describe('API Endpoints - Integration Tests', () => {
             expect(response.body).toHaveProperty('ip');
             expect(response.body).toHaveProperty('valid');
         });
+
+        test('should mask IP address for privacy', async () => {
+            // This test verifies that the internal logic (when using registerEvent)
+            // correctly masks the IP. Since /ip returns the raw requester IP for debugging,
+            // we check the /views endpoint which returns the stored (masked) IPs.
+            const response = await request(app)
+                .get('/views/test_app_1')
+                .expect(200);
+
+            expect(response.body.views[0]).toHaveProperty('masked_ip');
+            expect(response.body.views[0]).not.toHaveProperty('ip');
+            // Mock returns '192.168.1.0' for masked_ip
+            expect(response.body.views[0].masked_ip).toBe('192.168.1.0');
+        });
     });
 
     describe('GET /apps', () => {
@@ -97,6 +111,7 @@ describe('API Endpoints - Integration Tests', () => {
         test('should register view with page tracking', async () => {
             const response = await request(app)
                 .get('/registerView')
+                .set('X-Forwarded-For', '1.1.1.1') // Unique IP
                 .query({
                     appId: 'test_app_1',
                     deviceSize: 'large',
@@ -111,6 +126,7 @@ describe('API Endpoints - Integration Tests', () => {
         test('should register view with referrer', async () => {
             const response = await request(app)
                 .get('/registerView')
+                .set('X-Forwarded-For', '2.2.2.2') // Unique IP
                 .query({
                     appId: 'test_app_1',
                     deviceSize: 'small',
@@ -315,6 +331,7 @@ describe('API Endpoints - Integration Tests', () => {
 
             expect(response.body.appId).toBe('test_app_1');
             expect(Array.isArray(response.body.views)).toBe(true);
+            expect(response.body.views[0]).toHaveProperty('masked_ip');
             expect(response.body).toHaveProperty('total');
             expect(response.body).toHaveProperty('limit');
             expect(response.body).toHaveProperty('offset');

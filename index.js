@@ -217,7 +217,7 @@ app.post('/event', async (req, res) => {
         }
 
         const ipInfo = geoip.lookup(ip);
-        const userAgent = req.headers['user-agent'];
+        const userAgent = req.headers['user-agent'] || '';
         const uaData = UserAgentParser.parse(userAgent);
         const deviceSize = UserAgentParser.getDeviceSize(userAgent);
 
@@ -236,6 +236,7 @@ app.post('/event', async (req, res) => {
             sessionId,
             eventType,
             eventData,
+            userAgent, // Required for transient hashing
             uniqueWindowHours: 0 // Don't prevent duplicates for custom events
         });
 

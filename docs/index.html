@@ -153,6 +153,72 @@
             box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
         }
 
+        .badge-gdpr {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(34, 197, 94, 0.1);
+            color: #4ade80;
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            margin-bottom: 2rem;
+            gap: 0.5rem;
+        }
+
+        .lifecycle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 32px;
+            border: 1px solid var(--border);
+            margin: 4rem 0;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .lifecycle-step {
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+            position: relative;
+        }
+
+        .lifecycle-step .icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .lifecycle-step h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .lifecycle-step p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .lifecycle-divider {
+            color: var(--primary);
+            font-size: 1.5rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .lifecycle-container {
+                flex-direction: column;
+            }
+
+            .lifecycle-divider {
+                transform: rotate(90deg);
+            }
+        }
+
         main {
             max-width: 1200px;
             margin: 0 auto;
@@ -253,6 +319,13 @@
     </nav>
 
     <header>
+        <div class="badge-gdpr">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            100% GDPR Compliant By Design
+        </div>
         <h1>Privacy-First <span style="color: var(--primary)">Analytics</span></h1>
         <p>A lightweight, high-performance middleware for tracking views and events without compromising user privacy.
             Self-hosted, secure, and ready for production.</p>
@@ -289,9 +362,37 @@
 
         <section id="privacy" style="margin-top: 8rem;">
             <div class="section-title">
-                <h2>Privacy-First Principles</h2>
-                <p>Transparency is the core of trust. Here is how we protect your users.</p>
+                <h2>Trust & Transparency</h2>
+                <p>We believe in "Show, Don't Tell". Here is the exact lifecycle of a request.</p>
             </div>
+
+            <div class="lifecycle-container">
+                <div class="lifecycle-step">
+                    <div class="icon">🌍</div>
+                    <h4>Request</h4>
+                    <p>Raw IP + UserAgent</p>
+                </div>
+                <div class="lifecycle-divider">➜</div>
+                <div class="lifecycle-step"
+                    style="background: rgba(99,102,241,0.1); padding: 1rem; border-radius: 16px;">
+                    <div class="icon">⚙️</div>
+                    <h4>Processing</h4>
+                    <p>IP masked to .0<br>Salted Hashing</p>
+                </div>
+                <div class="lifecycle-divider">➜</div>
+                <div class="lifecycle-step">
+                    <div class="icon">🗑️</div>
+                    <h4>Discarded</h4>
+                    <p>Raw IP deleted from memory</p>
+                </div>
+                <div class="lifecycle-divider">➜</div>
+                <div class="lifecycle-step">
+                    <div class="icon">💾</div>
+                    <h4>Storage</h4>
+                    <p>Masked IP + Hash<br>Saved to DB</p>
+                </div>
+            </div>
+
             <div class="feature-grid">
                 <div class="card">
                     <h3>🍪 Zero Cookies</h3>
@@ -299,18 +400,24 @@
                         needed.</p>
                 </div>
                 <div class="card">
-                    <h3>🆔 No Fingerprinting</h3>
-                    <p>We don't create permanent IDs. Tracking is based on IP/UA within a short 24h uniqueness window.
-                    </p>
+                    <h3>🆔 Transient Hashing</h3>
+                    <p>We replace your IP with a <code>SHA256</code> hash salted daily. We track "Unique Views" without
+                        ever storing your real identity.</p>
                 </div>
                 <div class="card">
                     <h3>🏠 Data Ownership</h3>
                     <p>Self-hosted data. Your analytics never leave your infrastructure or get shared with big tech.</p>
                 </div>
                 <div class="card">
-                    <h3>🤏 Minimal Collection</h3>
-                    <p>Only essential data points (Country, Browser, OS, Page Path). No invasive behavioral tracking.
+                    <h3>🤏 IP Masking</h3>
+                    <p>We only use your IP for initial Country lookup, then immediately mask it (e.g.
+                        <code>1.2.3.0</code>) before storage.
                     </p>
+                </div>
+                <div class="card">
+                    <h3>✅ Automated Guardrails</h3>
+                    <p>Our build pipeline includes <b>Fail-Safe Tests</b> that scan database queries to ensure raw IPs
+                        never leak into storage.</p>
                 </div>
             </div>
         </section>

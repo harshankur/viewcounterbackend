@@ -20,8 +20,9 @@ CREATE TABLE IF NOT EXISTS `_migrations` (
 CREATE TABLE IF NOT EXISTS `{{APP_ID}}` (
     `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     
-    -- Core fields
-    `ip` VARCHAR(45) NOT NULL,
+    -- Identifiers (Anonymized)
+    `masked_ip` VARCHAR(45) NOT NULL,
+    `visitor_hash` VARCHAR(64) NOT NULL,
     `country` VARCHAR(2) DEFAULT NULL,
     `timestamp` DATETIME NOT NULL,
     `devicesize` VARCHAR(20) NOT NULL,
@@ -33,33 +34,32 @@ CREATE TABLE IF NOT EXISTS `{{APP_ID}}` (
     -- Referrer tracking
     `referrer` VARCHAR(500) DEFAULT NULL,
     `referrer_domain` VARCHAR(200) DEFAULT NULL,
-    `source_type` VARCHAR(20) DEFAULT NULL,
     
     -- User agent parsing
     `browser` VARCHAR(50) DEFAULT NULL,
     `browser_version` VARCHAR(20) DEFAULT NULL,
     `os` VARCHAR(50) DEFAULT NULL,
     `os_version` VARCHAR(20) DEFAULT NULL,
-    `device_type` VARCHAR(20) DEFAULT NULL,
+    `device_type` VARCHAR(20) DEFAULT NULL,  -- mobile, tablet, desktop
     
     -- Session tracking
     `session_id` VARCHAR(64) DEFAULT NULL,
     
     -- Custom events
-    `event_type` VARCHAR(50) DEFAULT 'pageview',
+    `event_type` VARCHAR(50) DEFAULT 'pageview',  -- pageview, click, submit, etc.
     `event_data` JSON DEFAULT NULL,
     
     -- Uniqueness tracking
-    `is_unique` TINYINT(1) DEFAULT 1,
+    `is_unique` TINYINT(1) DEFAULT 1,  -- 1 if first view in window, 0 otherwise
     
     -- Indexes
     INDEX `idx_timestamp` (`timestamp`),
-    INDEX `idx_ip_timestamp` (`ip`, `timestamp`),
+    INDEX `idx_visitor_timestamp` (`visitor_hash`, `timestamp`),
+    INDEX `idx_masked_ip` (`masked_ip`),
     INDEX `idx_country` (`country`),
     INDEX `idx_devicesize` (`devicesize`),
     INDEX `idx_page_path` (`page_path`(255)),
     INDEX `idx_referrer_domain` (`referrer_domain`),
-    INDEX `idx_source_type` (`source_type`),
     INDEX `idx_browser` (`browser`),
     INDEX `idx_os` (`os`),
     INDEX `idx_device_type` (`device_type`),

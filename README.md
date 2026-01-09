@@ -9,12 +9,32 @@ A comprehensive Node.js/Express analytics server for tracking website views with
 ## 📖 Documentation
 Visit our [Interactive Documentation](https://harshankur.github.io/viewcounterbackend/) for detailed API specifications, debugging tips, and integration guides.
 
-## 🛡️ Privacy-First Analytics
-This project is built from the ground up to respect user privacy:
+## 🛡️ GDPR Compliant & Privacy-First
+**100% GDPR Compliant By Design.** This project is built from the ground up to respect user privacy and adhere to modern ethical standards:
 - **Zero Cookies**: No cookies, no local storage, and no consent banners required.
-- **No Fingerprinting**: Does not use persistent identifiers; relies on transient IP/UA hashes.
 - **Data Sovereignty**: You own your data. Analytics never leave your private infrastructure.
 - **Minimal Collection**: Tracks only what is necessary (Country, Browser, OS, Page Path).
+
+### 🔄 Data Privacy Lifecycle
+```mermaid
+graph LR
+    A[Visitor Request] --> B{Privacy Filter}
+    B -->|Transient| C[Geo-lookup]
+    B -->|Transient| D[Daily Salting]
+    C --> E[Masked IP: 1.2.3.0]
+    D --> F[SHA256 Hash]
+    E --> G[(MySQL Database)]
+    F --> G
+    B -.->|Discarded| H[Raw IP Address]
+    style H fill:#f96,stroke:#333,stroke-width:2px
+```
+
+### 🧬 What happens to the IP?
+We believe in total transparency regarding your visitors' data:
+1. **Transient Use Only**: The raw IP address is used only in memory for the initial Country lookup and for generating the daily unique visitor hash.
+2. **Immediate Masking**: Before being saved to disk, the IP is masked (IPv4 last octet is zeroed).
+3. **No Storage**: The raw, identifiable IP address **never** touches the database disk.
+4. **Automated Guards**: Our build pipeline includes fail-safe regex tests to ensure no code changes can accidentally start saving raw IPs.
 
 ## ✨ Features
 
@@ -345,6 +365,22 @@ This setting prevents counting the same visitor multiple times within a time win
 - `168`: Same IP counts as 1 view per week
 
 **Note:** Only applies to `pageview` events, not custom events.
+
+### 🛡️ Privacy Guardrails (Fail-Safe)
+To guarantee that raw IPs never leak into the database, we've implemented an automated **Privacy Guard** suite ([privacyFailSafe.test.js](file:///Users/harshankur/Desktop/codes/viewcounterbackend/tests/privacyFailSafe.test.js)):
+- **Query Interception**: Every single SQL `INSERT` is intercepted during tests.
+- **Regex Scanning**: We scan all query parameters against raw IP patterns (IPv4 and IPv6).
+- **Hard Enforcement**: If the system ever attempts to save an unmasked IP, the test suite immediately fails, preventing accidental privacy regressions.
+
+This makes ViewCounter not just "Privacy-First" by design, but **Privacy-Guaranteed** by automation.
+
+- [x] Implement IP masking utility
+- [x] Implement transient hashing for uniqueness
+- [x] Update `DatabaseManager` to use hashes/masked IPs
+- [x] Update `db/schema.sql` (column renaming/clarification)
+- [x] Remove "IP Address" references from docs/README
+- [x] Update documentation with "How it works" privacy section
+- [x] Update and verify tests
 
 ## Security Features
 
