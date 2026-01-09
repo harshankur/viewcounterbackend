@@ -9,6 +9,13 @@ A comprehensive Node.js/Express analytics server for tracking website views with
 ## 📖 Documentation
 Visit our [Interactive Documentation](https://harshankur.github.io/viewcounterbackend/) for detailed API specifications, debugging tips, and integration guides.
 
+## 🛡️ Privacy-First Analytics
+This project is built from the ground up to respect user privacy:
+- **Zero Cookies**: No cookies, no local storage, and no consent banners required.
+- **No Fingerprinting**: Does not use persistent identifiers; relies on transient IP/UA hashes.
+- **Data Sovereignty**: You own your data. Analytics never leave your private infrastructure.
+- **Minimal Collection**: Tracks only what is necessary (Country, Browser, OS, Page Path).
+
 ## ✨ Features
 
 ### Core Capabilities
