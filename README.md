@@ -1,13 +1,13 @@
-# View Counter Backend
+# View Counter
 
-[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blueviolet)](https://harshankur.github.io/viewcounterbackend/)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blueviolet)](https://harshankur.github.io/viewcounter/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-61%20passing-success)](TEST_REPORT.md)
 
 A comprehensive Node.js/Express analytics server for tracking website views with MySQL storage, featuring auto-database creation, advanced tracking, and rich analytics.
 
 ## 📖 Documentation
-Visit our [Interactive Documentation](https://harshankur.github.io/viewcounterbackend/) for detailed API specifications, debugging tips, and integration guides.
+Visit our [Interactive Documentation](https://harshankur.github.io/viewcounter/) for detailed API specifications, debugging tips, and integration guides.
 
 ## 🛡️ GDPR Compliant & Privacy-First
 **100% GDPR Compliant By Design.** This project is built from the ground up to respect user privacy and adhere to modern ethical standards:
@@ -367,7 +367,7 @@ This setting prevents counting the same visitor multiple times within a time win
 **Note:** Only applies to `pageview` events, not custom events.
 
 ### 🛡️ Privacy Guardrails (Fail-Safe)
-To guarantee that raw IPs never leak into the database, we've implemented an automated **Privacy Guard** suite ([privacyFailSafe.test.js](file:///Users/harshankur/Desktop/codes/viewcounterbackend/tests/privacyFailSafe.test.js)):
+To guarantee that raw IPs never leak into the database, we've implemented an automated **Privacy Guard** suite ([privacyFailSafe.test.js](file:///Users/harshankur/Desktop/codes/viewcounter/tests/privacyFailSafe.test.js)):
 - **Query Interception**: Every single SQL `INSERT` is intercepted during tests.
 - **Regex Scanning**: We scan all query parameters against raw IP patterns (IPv4 and IPv6).
 - **Hard Enforcement**: If the system ever attempts to save an unmasked IP, the test suite immediately fails, preventing accidental privacy regressions.
@@ -529,4 +529,4 @@ All endpoints are tested with:
 
 ## License
 
-ISC
+[MIT](LICENSE) - Do whatever you want with this, just don't sue us.

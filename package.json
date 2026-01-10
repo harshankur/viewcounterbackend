@@ -1,5 +1,5 @@
 {
-  "name": "viewcounterbackend",
+  "name": "viewcounter",
   "description": "A middleware backend server that registers views to my db server when requested to register a view from my other projects.",
   "version": "2.0.0",
   "main": "index.js",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/harshankur/viewcounterbackend.git"
+    "url": "git+https://github.com/harshankur/viewcounter.git"
   },
   "keywords": [
     "viewcounter",
@@ -31,9 +31,9 @@
   "author": "Harsh Ankur",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/harshankur/viewcounterbackend/issues"
+    "url": "https://github.com/harshankur/viewcounter/issues"
   },
-  "homepage": "https://harshankur.github.io/viewcounterbackend/",
+  "homepage": "https://harshankur.github.io/viewcounter/",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

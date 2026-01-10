@@ -1,6 +1,6 @@
 # Debugging & Troubleshooting
 
-This guide provides tips and tricks for debugging the View Counter Backend.
+This guide provides tips and tricks for debugging the View Counter.
 
 ## Common Issues
 
@@ -42,4 +42,4 @@ The server uses structured logging. You can see detailed request information in 
 `[Timestamp] [INFO/WARN/ERROR] Message | IP: 123.123.123.123`
 
 ## Reporting Issues
-If you find a bug that isn't covered here, please [open an issue](https://github.com/harshankur/viewcounterbackend/issues).
+If you find a bug that isn't covered here, please [open an issue](https://github.com/harshankur/viewcounter/issues).

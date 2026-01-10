@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Currently, the following versions of View Counter Backend are supported with security updates:
+Currently, the following versions of View Counter are supported with security updates:
 
 | Version | Supported          |
 | ------- | ------------------ |

@@ -1,6 +1,6 @@
-# Contributing to View Counter Backend
+# Contributing to View Counter
 
-First off, thank you for considering contributing to View Counter Backend! It's people like you that make OSS such a great place to learn, inspire, and create.
+First off, thank you for considering contributing to View Counter! It's people like you that make OSS such a great place to learn, inspire, and create.
 
 ## How Can I Contribute?
 
@@ -23,7 +23,7 @@ First off, thank you for considering contributing to View Counter Backend! It's 
 
 ## Development Setup
 
-1. **Clone the repo**: `git clone https://github.com/harshankur/viewcounterbackend.git`
+1. **Clone the repo**: `git clone https://github.com/harshankur/viewcounter.git`
 2. **Install deps**: `npm install`
 3. **Setup environment**: Rename `.env.example` to `.env` or follow the `npm run setup` wizard.
 4. **Run tests**: `npm test`

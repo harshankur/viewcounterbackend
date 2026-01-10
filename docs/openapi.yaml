@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: View Counter Backend API
+  title: View Counter API
   description: |
     A privacy-first, lightweight analytics backend for tracking views and events across multiple applications.
     
@@ -12,7 +12,7 @@ info:
   version: 2.1.0
   contact:
     name: Harsh Ankur
-    url: https://github.com/harshankur/viewcounterbackend
+    url: https://github.com/harshankur/viewcounter
 servers:
   - url: http://localhost:3030
     description: Local development server

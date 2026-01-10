@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Counter Backend | Documentation</title>
+    <title>View Counter | Documentation</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -20,6 +21,38 @@
             --text-muted: #94a3b8;
             --border: rgba(255, 255, 255, 0.1);
             --gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --nav-bg: rgba(15, 23, 42, 0.8);
+            --code-bg: #1e293b;
+            --btn-secondary-bg: transparent;
+            --btn-secondary-border: rgba(255, 255, 255, 0.2);
+            --btn-secondary-text: #f8fafc;
+        }
+
+        [data-theme="light"] {
+            --primary: #4f46e5;
+            --primary-glow: rgba(79, 70, 229, 0.15);
+            --bg: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text: #0f172a;
+            --text-muted: #475569;
+            --border: rgba(0, 0, 0, 0.1);
+            --nav-bg: rgba(248, 250, 252, 0.8);
+            --code-bg: #f1f5f9;
+            --btn-secondary-bg: #ffffff;
+            --btn-secondary-border: rgba(0, 0, 0, 0.1);
+            --btn-secondary-text: #0f172a;
+        }
+
+        body {
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Fix Redoc syntax highlighting in light mode */
+        [data-theme="light"] .token.property,
+        [data-theme="light"] .token.string,
+        [data-theme="light"] .token.operator,
+        [data-theme="light"] .token.punctuation {
+            color: #1e293b !important;
         }
 
         * {
@@ -82,10 +115,44 @@
             align-items: center;
             position: sticky;
             top: 0;
-            background: rgba(15, 23, 42, 0.8);
+            background: var(--nav-bg);
             backdrop-filter: blur(10px);
             z-index: 100;
             border-bottom: 1px solid var(--border);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .theme-switcher {
+            display: flex;
+            background: var(--border);
+            padding: 0.25rem;
+            border-radius: 50px;
+            gap: 0.25rem;
+        }
+
+        .theme-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .theme-btn:hover {
+            color: var(--text);
+        }
+
+        .theme-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 2px 8px var(--primary-glow);
         }
 
         .logo {
@@ -153,6 +220,20 @@
             box-shadow: 0 15px 30px rgba(99, 102, 241, 0.4);
         }
 
+        .btn-secondary {
+            background: var(--btn-secondary-bg);
+            color: var(--btn-secondary-text);
+            border: 1px solid var(--btn-secondary-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: var(--btn-secondary-text);
+            color: var(--bg);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
         .badge-gdpr {
             display: inline-flex;
             align-items: center;
@@ -172,12 +253,13 @@
             justify-content: space-between;
             align-items: center;
             padding: 3rem;
-            background: rgba(15, 23, 42, 0.5);
+            background: var(--nav-bg);
             border-radius: 32px;
             border: 1px solid var(--border);
             margin: 4rem 0;
             flex-wrap: wrap;
             gap: 2rem;
+            transition: background-color 0.3s;
         }
 
         .lifecycle-step {
@@ -257,10 +339,11 @@
 
         #api-docs {
             margin-top: 8rem;
-            background: #fff;
+            background: var(--bg);
             border-radius: 24px;
             overflow: hidden;
             min-height: 800px;
+            border: 1px solid var(--border);
         }
 
         .section-title {
@@ -281,7 +364,7 @@
         }
 
         .code-block {
-            background: #1e293b;
+            background: var(--code-bg);
             padding: 1.5rem;
             border-radius: 12px;
             font-family: 'Courier New', Courier, monospace;
@@ -289,6 +372,7 @@
             margin: 2rem 0;
             overflow-x: auto;
             border-left: 4px solid var(--primary);
+            transition: background-color 0.3s;
         }
 
         @media (max-width: 768px) {
@@ -314,7 +398,12 @@
             <a href="#features">Features</a>
             <a href="#quick-start">Quick Start</a>
             <a href="#api-reference">API Reference</a>
-            <a href="https://github.com/harshankur/viewcounterbackend">GitHub</a>
+            <a href="https://github.com/harshankur/viewcounter">GitHub</a>
+        </div>
+        <div class="theme-switcher">
+            <button class="theme-btn" id="theme-light" title="Light Mode">☀️</button>
+            <button class="theme-btn" id="theme-dark" title="Dark Mode">🌙</button>
+            <button class="theme-btn" id="theme-auto" title="System Preference">🌓</button>
         </div>
     </nav>
 
@@ -331,8 +420,7 @@
             Self-hosted, secure, and ready for production.</p>
         <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
             <a href="#api-reference" class="btn btn-primary">API Reference</a>
-            <a href="https://github.com/harshankur/viewcounterbackend" class="btn"
-                style="border: 1px solid var(--border);">Fork on GitHub</a>
+            <a href="https://github.com/harshankur/viewcounter" class="btn btn-secondary">Fork on GitHub</a>
         </div>
     </header>
 
@@ -430,7 +518,7 @@
             <div style="max-width: 800px; margin: 0 auto;">
                 <h3>1. Installation</h3>
                 <div class="code-block">
-                    git clone https://github.com/harshankur/viewcounterbackend.git<br>
+                    git clone https://github.com/harshankur/viewcounter.git<br>
                     npm install
                 </div>
                 <h3>2. Setup</h3>
@@ -473,28 +561,107 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 View Counter Backend. Built with ❤️ for the Open Source community.</p>
+        <p>&copy; 2026 View Counter. Built with ❤️ for the Open Source community.</p>
     </footer>
 
     <!-- Redoc for interactive API documentation -->
+    <script>window.process = { env: { NODE_ENV: 'production' } };</script>
     <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
     <script>
-        Redoc.init(
-            'openapi.yaml',
-            {
-                theme: {
-                    colors: {
-                        primary: {
-                            main: '#6366f1'
+        const themeBtns = {
+            light: document.getElementById('theme-light'),
+            dark: document.getElementById('theme-dark'),
+            auto: document.getElementById('theme-auto')
+        };
+
+        function getTheme() {
+            const saved = localStorage.getItem('theme');
+            if (saved) return saved;
+            return 'auto';
+        }
+
+        function setTheme(theme) {
+            localStorage.setItem('theme', theme);
+            updateThemeUI(theme);
+        }
+
+        function updateThemeUI(theme) {
+            Object.values(themeBtns).forEach(btn => btn.classList.remove('active'));
+            themeBtns[theme].classList.add('active');
+
+            let actualTheme = theme;
+            if (theme === 'auto') {
+                actualTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            document.documentElement.setAttribute('data-theme', actualTheme);
+            initRedoc(actualTheme);
+        }
+
+        function initRedoc(theme) {
+            const isDark = theme === 'dark';
+            Redoc.init(
+                'openapi.yaml',
+                {
+                    theme: {
+                        colors: {
+                            primary: {
+                                main: '#6366f1'
+                            },
+                            text: {
+                                primary: isDark ? '#f8fafc' : '#0f172a',
+                                secondary: isDark ? '#94a3b8' : '#475569'
+                            },
+                            http: {
+                                get: '#22c55e',
+                                post: '#6366f1',
+                                put: '#f59e0b',
+                                delete: '#ef4444',
+                            }
+                        },
+                        typography: {
+                            fontFamily: 'Inter, sans-serif',
+                            headings: {
+                                fontFamily: 'Outfit, sans-serif',
+                            },
+                            code: {
+                                color: isDark ? '#e2e8f0' : '#475569',
+                                backgroundColor: isDark ? '#1e293b' : '#f1f5f9',
+                            }
+                        },
+                        sidebar: {
+                            backgroundColor: isDark ? '#111827' : '#f8fafc',
+                            textColor: isDark ? '#e2e8f0' : '#475569',
+                            activeTextColor: '#6366f1',
+                            activeBackgroundColor: isDark ? 'rgba(99, 102, 241, 0.1)' : 'rgba(99, 102, 241, 0.05)',
+                        },
+                        rightPanel: {
+                            backgroundColor: isDark ? '#0f172a' : '#ffffff',
+                            textColor: isDark ? '#f8fafc' : '#0f172a',
+                        },
+                        codeBlock: {
+                            backgroundColor: isDark ? '#1e293b' : '#f8fafc',
                         }
-                    },
-                    typography: {
-                        fontFamily: 'Inter, sans-serif'
                     }
-                }
-            },
-            document.getElementById('api-docs')
-        );
+                },
+                document.getElementById('api-docs')
+            );
+        }
+
+        // Listen for system theme changes if in auto mode
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (getTheme() === 'auto') {
+                updateThemeUI('auto');
+            }
+        });
+
+        // Click handlers
+        themeBtns.light.onclick = () => setTheme('light');
+        themeBtns.dark.onclick = () => setTheme('dark');
+        themeBtns.auto.onclick = () => setTheme('auto');
+
+        // Initial setup
+        updateThemeUI(getTheme());
     </script>
 </body>
 
